@@ -9,12 +9,16 @@ public class Station {
     public Station() {
     }
 
-    public Station(Long id, String name) {
-        this.id = id;
+    public Station(String name) {
         this.name = name;
     }
 
-    public Station(String name) {
+    public Station(Long id) {
+        this.id = id;
+    }
+
+    public Station(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -37,5 +41,9 @@ public class Station {
     @Override
     public int hashCode() {
         return Objects.hash(id, name);
+    }
+
+    public boolean isSameId(Long id) {
+        return this.id.equals(id);
     }
 }
