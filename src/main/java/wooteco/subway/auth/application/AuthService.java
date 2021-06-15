@@ -20,10 +20,17 @@ public class AuthService {
     }
 
     public TokenResponse createToken(TokenRequest tokenRequest) {
-        Member member = memberDao.findByEmailAndPassword(tokenRequest.getEmail(), tokenRequest.getPassword())
-                .orElseThrow(() -> new AuthorizationException("로그인 실패입니다."));
+        Member member = findMember(tokenRequest);
+        if (member.isInvalidPassword(tokenRequest.getPassword())) {
+            throw new AuthorizationException("로그인 실패입니다.");
+        }
         String accessToken = jwtTokenProvider.createToken(String.valueOf(member.getId()));
         return new TokenResponse(accessToken);
+    }
+
+    private Member findMember(TokenRequest tokenRequest) {
+        return memberDao.findByEmail(tokenRequest.getEmail())
+                .orElseThrow(() -> new AuthorizationException("로그인 실패입니다."));
     }
 
     public LoginMember findLoginMemberByToken(String token) {

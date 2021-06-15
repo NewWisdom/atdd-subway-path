@@ -49,4 +49,8 @@ public class Member {
     public Integer getAge() {
         return age;
     }
+
+    public boolean isInvalidPassword(String password) {
+        return !this.password.equals(password);
+    }
 }

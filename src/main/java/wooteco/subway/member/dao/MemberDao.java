@@ -57,10 +57,10 @@ public class MemberDao {
         }
     }
 
-    public Optional<Member> findByEmailAndPassword(String email, String password) {
-        String sql = "select * from MEMBER where email = ? AND password = ?";
+    public Optional<Member> findByEmail(String email) {
+        String sql = "select * from MEMBER where email = ?";
         try {
-            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, email, password));
+            return Optional.ofNullable(jdbcTemplate.queryForObject(sql, rowMapper, email));
         } catch (DataAccessException e) {
             return Optional.empty();
         }

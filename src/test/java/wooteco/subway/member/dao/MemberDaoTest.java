@@ -30,7 +30,9 @@ class MemberDaoTest {
     @Test
     @DisplayName("이메일과 비밀번호로 사용자를 찾는다.")
     void findByEmailAndPassword() {
-        Member member = memberDao.findByEmailAndPassword(EMAIL, PASSWORD).get();
+        memberDao.insert(new Member(EMAIL, PASSWORD, 0));
+
+        Member member = memberDao.findByEmail(EMAIL).get();
 
         assertThat(member.getEmail()).isEqualTo(EMAIL);
         assertThat(member.getPassword()).isEqualTo(PASSWORD);
@@ -39,9 +41,9 @@ class MemberDaoTest {
     @Test
     @DisplayName("잘못된 이메일 또는 비밀번호로 사용자를 찾는다.")
     void findByWrongEmailOrPassword() {
-        Optional<Member> member1 = memberDao.findByEmailAndPassword("wrong@email.com", PASSWORD);
+        Optional<Member> member1 = memberDao.findByEmail("wrong@email.com");
         assertThat(member1.isPresent()).isFalse();
-        Optional<Member> member2 = memberDao.findByEmailAndPassword(EMAIL, "wrongpassword");
+        Optional<Member> member2 = memberDao.findByEmail(EMAIL);
         assertThat(member2.isPresent()).isFalse();
     }
 }
