@@ -3,8 +3,8 @@ package wooteco.subway.member.ui;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wooteco.subway.auth.domain.AuthenticationPrincipal;
+import wooteco.subway.auth.dto.LoginMember;
 import wooteco.subway.member.application.MemberService;
-import wooteco.subway.member.domain.Member;
 import wooteco.subway.member.dto.MemberRequest;
 import wooteco.subway.member.dto.MemberResponse;
 
@@ -20,7 +20,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity createMember(@RequestBody MemberRequest request) {
+    public ResponseEntity<Void> createMember(@RequestBody MemberRequest request) {
         MemberResponse member = memberService.createMember(request);
         return ResponseEntity.created(URI.create("/members/" + member.getId())).build();
     }
@@ -43,19 +43,19 @@ public class MemberController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal Member member) {
-        return ResponseEntity.ok(new MemberResponse(member));
+    public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        return ResponseEntity.ok(new MemberResponse(loginMember));
     }
 
     @PutMapping("/me")
     public ResponseEntity<MemberResponse> updateMemberOfMin(
-            @AuthenticationPrincipal Member member, @RequestBody MemberRequest memberRequest) {
-        return ResponseEntity.ok(memberService.updateMember(member.getId(), memberRequest));
+            @AuthenticationPrincipal LoginMember loginMember, @RequestBody MemberRequest memberRequest) {
+        return ResponseEntity.ok(memberService.updateMember(loginMember.getId(), memberRequest));
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteMemberOfMine(@AuthenticationPrincipal Member member) {
-        memberService.deleteMember(member.getId());
+    public ResponseEntity<Void> deleteMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        memberService.deleteMember(loginMember.getId());
         return ResponseEntity.noContent().build();
     }
 }
